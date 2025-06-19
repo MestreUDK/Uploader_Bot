@@ -6,4 +6,8 @@ services:
     startCommand: python bot.py
     envVars:
       - key: BOT_TOKEN
-        sync: false  # você vai adicionar isso manualmente no painel do Render
+        sync: false
+      - key: ADMIN_ID
+        sync: false
+      - key: ALLOWED_IDS
+        sync: false
