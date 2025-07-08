@@ -3,8 +3,8 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from utils.restrict import restricted
-from modules.baixar_video import baixar_e_enviar_video
-from modules.baixar_avancado import baixar_com_argumentos
+from modules.baixar.baixar_video import baixar_e_enviar_video
+from modules.baixar.baixar_avancado import baixar_com_argumentos
 
 @restricted
 async def baixar(update: Update, context: ContextTypes.DEFAULT_TYPE):
