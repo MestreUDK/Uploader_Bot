@@ -1,34 +1,42 @@
 # bot.py
 
 from telegram.ext import ApplicationBuilder, CommandHandler
-from config import BOT_TOKEN
+from config import BOT_TOKEN, RENDER_EXTERNAL_URL
 from handlers.common import start
 from handlers.download import baixar, avancado
+from flask import Flask, request
+from telegram import Update
 
-import threading
-from flask import Flask
-
-# 🔹 Servidor web fictício para satisfazer o Render
+# 🔹 Servidor Flask que receberá o webhook
 web_app = Flask(__name__)
+telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
 
+# 🔹 Rota para o Telegram enviar as atualizações (webhook)
+@web_app.route(f"/{BOT_TOKEN}", methods=["POST"])
+async def webhook():
+    data = request.get_json(force=True)
+    update = Update.de_json(data, telegram_app.bot)
+    await telegram_app.process_update(update)
+    return "ok"
+
+# 🔹 Rota padrão para teste
 @web_app.route('/')
 def home():
-    return 'Uploader bot está rodando!'
-
-def run_web():
-    web_app.run(host="0.0.0.0", port=10000)
+    return 'Uploader bot rodando com Webhook!'
 
 def main():
-    # 🔹 Inicia o web server em uma thread separada
-    threading.Thread(target=run_web).start()
+    # Adiciona os comandos
+    telegram_app.add_handler(CommandHandler("start", start))
+    telegram_app.add_handler(CommandHandler("download", baixar))
+    telegram_app.add_handler(CommandHandler("avancado", avancado))
 
-    # 🔹 Inicia o bot normalmente com polling
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("download", baixar))
-    app.add_handler(CommandHandler("avancado", avancado))
-    app.run_polling()
+    # 🔹 Inicia o webhook
+    telegram_app.run_webhook(
+        listen="0.0.0.0",
+        port=10000,
+        webhook_url=f"{RENDER_EXTERNAL_URL}/{BOT_TOKEN}",
+        web_app=web_app,
+    )
 
 if __name__ == "__main__":
     main()
-
