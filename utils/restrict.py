@@ -1,3 +1,5 @@
+# utils/restrict.py
+
 from config import AUTHORIZED_USERS
 from telegram import Update
 from telegram.ext import ContextTypes
