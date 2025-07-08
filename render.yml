@@ -1,4 +1,5 @@
 # render.yml
+
 services:
   - type: web
     name: uploader-bot
@@ -11,4 +12,6 @@ services:
       - key: ADMIN_ID
         sync: false
       - key: ALLOWED_IDS
+        sync: false
+      - key: RENDER_EXTERNAL_URL
         sync: false
