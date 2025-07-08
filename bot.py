@@ -1,4 +1,5 @@
 # bot.py
+
 from telegram.ext import ApplicationBuilder, CommandHandler
 from config import BOT_TOKEN
 from handlers.common import start
