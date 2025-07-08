@@ -4,10 +4,6 @@ from config import BOT_TOKEN
 from handlers.common import start
 from handlers.download import baixar, avancado
 
-
-
-
-
 import threading
 from flask import Flask
 
