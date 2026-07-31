@@ -1,3 +1,5 @@
+# bot.py
+
 """Ponto de entrada do Uploader Bot."""
 
 import logging
